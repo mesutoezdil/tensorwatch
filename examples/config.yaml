@@ -1,0 +1,40 @@
+interval: 1s
+
+tui:
+  enabled: true
+
+http:
+  enabled: true
+  addr: ":9123"
+  token: ""
+
+csv:
+  enabled: false
+  path: "tensorwatch.csv"
+
+alert_webhook: ""
+
+alerts:
+  - name: cpu_hot
+    metric: cpu.temp
+    operator: ">"
+    value: 85
+    sustain: 30s
+
+  - name: memory_pressure
+    metric: mem.used_pct
+    operator: ">"
+    value: 92
+    sustain: 1m
+
+  - name: gpu_thermal
+    metric: gpu.temp
+    operator: ">"
+    value: 82
+    sustain: 20s
+
+  - name: gpu_vram_full
+    metric: gpu.mem_used_pct
+    operator: ">"
+    value: 95
+    sustain: 30s
