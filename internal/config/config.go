@@ -9,12 +9,12 @@ import (
 )
 
 type Config struct {
-	Interval     Duration       `yaml:"interval"`
-	TUI          TUI            `yaml:"tui"`
-	HTTP         HTTP           `yaml:"http"`
-	CSV          CSV            `yaml:"csv"`
-	Alerts       []AlertRule    `yaml:"alerts"`
-	AlertWebhook string         `yaml:"alert_webhook"`
+	Interval     Duration    `yaml:"interval"`
+	TUI          TUI         `yaml:"tui"`
+	HTTP         HTTP        `yaml:"http"`
+	CSV          CSV         `yaml:"csv"`
+	Alerts       []AlertRule `yaml:"alerts"`
+	AlertWebhook string      `yaml:"alert_webhook"`
 }
 
 type TUI struct {
@@ -33,10 +33,10 @@ type CSV struct {
 }
 
 type AlertRule struct {
-	Name     string  `yaml:"name"`
-	Metric   string  `yaml:"metric"`
-	Operator string  `yaml:"operator"`
-	Value    float64 `yaml:"value"`
+	Name     string   `yaml:"name"`
+	Metric   string   `yaml:"metric"`
+	Operator string   `yaml:"operator"`
+	Value    float64  `yaml:"value"`
 	Sustain  Duration `yaml:"sustain"`
 }
 

@@ -64,22 +64,22 @@ type Memory struct {
 }
 
 type GPU struct {
-	Index       int     `json:"index"`
-	Vendor      string  `json:"vendor"`
-	Name        string  `json:"name"`
-	UUID        string  `json:"uuid,omitempty"`
-	UtilGPU     float64 `json:"util_gpu_pct"`
-	UtilMemory  float64 `json:"util_mem_pct"`
-	MemTotal    uint64  `json:"mem_total_bytes"`
-	MemUsed     uint64  `json:"mem_used_bytes"`
-	TempCelsius float64 `json:"temp_c"`
-	PowerWatts  float64 `json:"power_w"`
-	PowerLimitW float64 `json:"power_limit_w,omitempty"`
-	ClockCore   uint32  `json:"clock_core_mhz,omitempty"`
-	ClockMem    uint32  `json:"clock_mem_mhz,omitempty"`
-	FanPercent  float64 `json:"fan_pct,omitempty"`
-	EncoderPct  float64 `json:"encoder_pct,omitempty"`
-	DecoderPct  float64 `json:"decoder_pct,omitempty"`
+	Index       int          `json:"index"`
+	Vendor      string       `json:"vendor"`
+	Name        string       `json:"name"`
+	UUID        string       `json:"uuid,omitempty"`
+	UtilGPU     float64      `json:"util_gpu_pct"`
+	UtilMemory  float64      `json:"util_mem_pct"`
+	MemTotal    uint64       `json:"mem_total_bytes"`
+	MemUsed     uint64       `json:"mem_used_bytes"`
+	TempCelsius float64      `json:"temp_c"`
+	PowerWatts  float64      `json:"power_w"`
+	PowerLimitW float64      `json:"power_limit_w,omitempty"`
+	ClockCore   uint32       `json:"clock_core_mhz,omitempty"`
+	ClockMem    uint32       `json:"clock_mem_mhz,omitempty"`
+	FanPercent  float64      `json:"fan_pct,omitempty"`
+	EncoderPct  float64      `json:"encoder_pct,omitempty"`
+	DecoderPct  float64      `json:"decoder_pct,omitempty"`
 	Processes   []GPUProcess `json:"processes,omitempty"`
 }
 

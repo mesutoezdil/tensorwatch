@@ -23,7 +23,7 @@ func main() {
 		period   = flag.Duration("period", 30*time.Second, "wave period")
 	)
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), `twload — synthetic CPU load generator for tensorwatch validation
+		fmt.Fprintf(flag.CommandLine.Output(), `twload - synthetic CPU load generator for tensorwatch validation
 
 Patterns:
   sine     smooth sinusoidal sweep (base ± amplitude)

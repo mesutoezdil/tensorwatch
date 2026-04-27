@@ -41,7 +41,7 @@ func main() {
 		showVer    = flag.Bool("version", false, "print version and exit")
 	)
 	flag.Usage = func() {
-		fmt.Fprintf(flag.CommandLine.Output(), `tensorwatch %s — pluggable observability agent for compute hosts
+		fmt.Fprintf(flag.CommandLine.Output(), `tensorwatch %s - pluggable observability agent for compute hosts
 
 Usage:
   tensorwatch [flags]

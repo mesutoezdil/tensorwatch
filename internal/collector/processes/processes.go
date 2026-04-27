@@ -13,7 +13,7 @@ import (
 type Collector struct {
 	limit int
 
-	mu     sync.Mutex
+	mu      sync.Mutex
 	prevCPU map[int32]float64
 }
 

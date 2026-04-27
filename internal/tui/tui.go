@@ -196,12 +196,12 @@ func (t *TUI) drawCPU(s model.Snapshot, x, y, w, h int) {
 	if meta == "" {
 		meta = "unknown CPU"
 	}
-	meta = fmt.Sprintf("%s  ·  %dL/%dP", meta, s.CPU.LogicalCores, s.CPU.PhysicalCores)
+	meta = fmt.Sprintf("%s  |  %dL/%dP", meta, s.CPU.LogicalCores, s.CPU.PhysicalCores)
 	if s.CPU.TempCelsius > 0 {
-		meta += fmt.Sprintf("  ·  %.1f°C", s.CPU.TempCelsius)
+		meta += fmt.Sprintf("  |  %.1f°C", s.CPU.TempCelsius)
 	}
 	if s.CPU.FreqMHz >= 100 {
-		meta += fmt.Sprintf("  ·  %.0f MHz", s.CPU.FreqMHz)
+		meta += fmt.Sprintf("  |  %.0f MHz", s.CPU.FreqMHz)
 	}
 	t.printf(x, y+1, styleMuted(), trim(meta, w))
 
@@ -291,7 +291,7 @@ func (t *TUI) drawGPU(s model.Snapshot, x, y, w, h int) {
 
 		if g.ClockCore > 0 {
 			t.printf(x, row, styleMuted(),
-				fmt.Sprintf("clk gfx %d MHz · mem %d MHz   fan %.0f%%",
+				fmt.Sprintf("clk gfx %d MHz | mem %d MHz   fan %.0f%%",
 					g.ClockCore, g.ClockMem, g.FanPercent))
 			row++
 		}
@@ -359,8 +359,8 @@ func (t *TUI) drawFooter(s model.Snapshot, x, y, w, h int) {
 			"mem   "+sparkline(t.memHistory.ordered(), sparkW))
 	}
 
-	hint := " q quit  ·  c " + ifThen(t.compact, "expand", "compact") +
-		"  ·  pk = " + formatDur(time.Duration(s.Peaks.WindowSec)*time.Second) + " peak "
+	hint := " q quit  |  c " + ifThen(t.compact, "expand", "compact") +
+		"  |  pk = " + formatDur(time.Duration(s.Peaks.WindowSec)*time.Second) + " peak "
 	t.printf(maxInt(0, w-len(hint)), y+h-1, styleMuted(), hint)
 }
 
@@ -503,7 +503,7 @@ func trim(s string, w int) string {
 	if w <= 1 {
 		return s[:w]
 	}
-	return s[:w-1] + "…"
+	return s[:w-1] + "..."
 }
 
 func ifThen(cond bool, a, b string) string {

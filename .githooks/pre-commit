@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -eu
+
+cd "$(git rev-parse --show-toplevel)"
+
+unformatted=$(gofmt -l .)
+if [ -n "$unformatted" ]; then
+  echo "gofmt would change these files:"
+  echo "$unformatted"
+  echo
+  echo "run: gofmt -s -w ."
+  exit 1
+fi
+
+go vet ./...

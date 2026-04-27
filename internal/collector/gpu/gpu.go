@@ -15,9 +15,9 @@ type Collector interface {
 
 type noop struct{}
 
-func (noop) Name() string                                 { return "gpu-noop" }
+func (noop) Name() string                                       { return "gpu-noop" }
 func (noop) Collect(_ context.Context, _ *model.Snapshot) error { return nil }
-func (noop) Close() error                                 { return nil }
-func (noop) Available() bool                              { return false }
+func (noop) Close() error                                       { return nil }
+func (noop) Available() bool                                    { return false }
 
 func Noop() Collector { return noop{} }

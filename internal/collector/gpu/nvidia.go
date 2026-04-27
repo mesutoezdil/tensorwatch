@@ -38,7 +38,7 @@ func New() Collector {
 	return c
 }
 
-func (c *nvidiaCollector) Name() string  { return "gpu-nvidia" }
+func (c *nvidiaCollector) Name() string    { return "gpu-nvidia" }
 func (c *nvidiaCollector) Available() bool { return c.ready && len(c.devices) > 0 }
 
 func (c *nvidiaCollector) Close() error {
