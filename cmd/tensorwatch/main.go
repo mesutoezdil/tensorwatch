@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -26,6 +27,13 @@ import (
 )
 
 var version = "0.2.0"
+
+func displayVersion(v string) string {
+	if strings.HasPrefix(v, "v") {
+		return v
+	}
+	return "v" + v
+}
 
 func main() {
 	var (
@@ -158,7 +166,7 @@ Flags:
 	}
 
 	if cfg.TUI.Enabled {
-		ui, err := tui.New(pipe.Subscribe(8), tui.Options{Compact: *compact, Version: "v" + version})
+		ui, err := tui.New(pipe.Subscribe(8), tui.Options{Compact: *compact, Version: displayVersion(version)})
 		if err != nil {
 			logger.Fatalf("tui: %v", err)
 		}

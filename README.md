@@ -247,6 +247,10 @@ tensorwatch is designed to stay invisible on the host it monitors. See [PERFORMA
 
 Alpha. The data model and CLI flags may still shift between minor versions. Pin a tag if you embed it in tooling.
 
+## Contributing
+
+Bug reports, feature requests and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the local setup, project layout, the rules new collectors and exporters follow, and the release process.
+
 ## License
 
 MIT - see [LICENSE](LICENSE).
