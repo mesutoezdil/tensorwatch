@@ -3,12 +3,32 @@ package model
 import "time"
 
 type Snapshot struct {
-	Taken    time.Time `json:"taken"`
-	Host     Host      `json:"host"`
-	CPU      CPU       `json:"cpu"`
-	Memory   Memory    `json:"memory"`
-	GPUs     []GPU     `json:"gpus"`
-	Warnings []string  `json:"warnings,omitempty"`
+	Taken     time.Time `json:"taken"`
+	Host      Host      `json:"host"`
+	CPU       CPU       `json:"cpu"`
+	Memory    Memory    `json:"memory"`
+	GPUs      []GPU     `json:"gpus"`
+	Processes []Process `json:"processes,omitempty"`
+	Peaks     Peaks     `json:"peaks"`
+	Warnings  []string  `json:"warnings,omitempty"`
+}
+
+type Process struct {
+	PID     int32   `json:"pid"`
+	User    string  `json:"user"`
+	Command string  `json:"command"`
+	CPUPct  float64 `json:"cpu_pct"`
+	MemPct  float64 `json:"mem_pct"`
+	RSS     uint64  `json:"rss_bytes"`
+}
+
+type Peaks struct {
+	WindowSec int     `json:"window_sec"`
+	CPU       float64 `json:"cpu_pct"`
+	GPU       float64 `json:"gpu_pct"`
+	MemPct    float64 `json:"mem_pct"`
+	GPUTemp   float64 `json:"gpu_temp_c"`
+	CPUTemp   float64 `json:"cpu_temp_c"`
 }
 
 type Host struct {

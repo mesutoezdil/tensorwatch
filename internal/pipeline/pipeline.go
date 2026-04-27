@@ -10,20 +10,23 @@ import (
 	"github.com/mesutoezdil/tensorwatch/internal/model"
 )
 
+type Decorator func(*model.Snapshot)
+
 type Pipeline struct {
 	collectors collector.Set
 	interval   time.Duration
+	decorators []Decorator
 
 	mu          sync.RWMutex
 	subscribers []chan model.Snapshot
 	last        *model.Snapshot
 }
 
-func New(collectors collector.Set, interval time.Duration) *Pipeline {
+func New(collectors collector.Set, interval time.Duration, decorators ...Decorator) *Pipeline {
 	if interval < 100*time.Millisecond {
 		interval = 100 * time.Millisecond
 	}
-	return &Pipeline{collectors: collectors, interval: interval}
+	return &Pipeline{collectors: collectors, interval: interval, decorators: decorators}
 }
 
 func (p *Pipeline) Subscribe(buf int) <-chan model.Snapshot {
@@ -73,6 +76,9 @@ func (p *Pipeline) tick(ctx context.Context) {
 	}
 	if len(errs) == len(p.collectors) && len(p.collectors) > 0 {
 		_ = errors.Join(errs...)
+	}
+	for _, d := range p.decorators {
+		d(snap)
 	}
 
 	p.mu.Lock()

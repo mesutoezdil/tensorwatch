@@ -16,14 +16,16 @@ import (
 	gpuc "github.com/mesutoezdil/tensorwatch/internal/collector/gpu"
 	hostc "github.com/mesutoezdil/tensorwatch/internal/collector/host"
 	memc "github.com/mesutoezdil/tensorwatch/internal/collector/memory"
+	procc "github.com/mesutoezdil/tensorwatch/internal/collector/processes"
 	"github.com/mesutoezdil/tensorwatch/internal/config"
 	"github.com/mesutoezdil/tensorwatch/internal/exporter"
 	"github.com/mesutoezdil/tensorwatch/internal/httpapi"
+	"github.com/mesutoezdil/tensorwatch/internal/peaks"
 	"github.com/mesutoezdil/tensorwatch/internal/pipeline"
 	"github.com/mesutoezdil/tensorwatch/internal/tui"
 )
 
-var version = "0.1.0"
+var version = "0.2.0"
 
 func main() {
 	var (
@@ -33,8 +35,30 @@ func main() {
 		httpToken  = flag.String("http-token", "", "bearer token for HTTP endpoints")
 		csvPath    = flag.String("csv", "", "append samples to CSV file")
 		headless   = flag.Bool("headless", false, "disable TUI")
+		compact    = flag.Bool("compact", false, "compact TUI (no process table)")
+		topN       = flag.Int("top", 8, "number of processes shown in TUI")
+		peakWindow = flag.Duration("peak-window", 30*time.Minute, "rolling window for peak tracking")
 		showVer    = flag.Bool("version", false, "print version and exit")
 	)
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), `tensorwatch %s — pluggable observability agent for compute hosts
+
+Usage:
+  tensorwatch [flags]
+
+Examples:
+  tensorwatch                              # interactive TUI
+  tensorwatch -interval 500ms              # half-second refresh
+  tensorwatch -http :9123                  # TUI + Prometheus / JSON HTTP API
+  tensorwatch -headless -http :9123        # exporter only
+  tensorwatch -csv samples.csv             # append metrics to CSV
+  tensorwatch -compact                     # smaller layout, no process table
+  tensorwatch -config examples/config.yaml # YAML config (flags still override)
+
+Flags:
+`, version)
+		flag.PrintDefaults()
+	}
 	flag.Parse()
 
 	if *showVer {
@@ -82,15 +106,20 @@ func main() {
 		cpuc.New(),
 		memc.New(),
 	}
+	if cfg.TUI.Enabled && !*compact {
+		collectors = append(collectors, procc.New(*topN))
+	}
 	if gpuCol.Available() {
 		collectors = append(collectors, gpuCol)
 	}
 
-	pipe := pipeline.New(collectors, cfg.Interval.Duration)
+	peakTracker := peaks.New(*peakWindow)
+	pipe := pipeline.New(collectors, cfg.Interval.Duration, peakTracker.Decorate)
 
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
+	go peakTracker.Consume(ctx, pipe.Subscribe(8))
 	go func() {
 		if err := pipe.Run(ctx); err != nil {
 			log.Printf("pipeline: %v", err)
@@ -129,7 +158,7 @@ func main() {
 	}
 
 	if cfg.TUI.Enabled {
-		ui, err := tui.New(pipe.Subscribe(8))
+		ui, err := tui.New(pipe.Subscribe(8), tui.Options{Compact: *compact, Version: "v" + version})
 		if err != nil {
 			logger.Fatalf("tui: %v", err)
 		}
