@@ -149,7 +149,9 @@ func (t *TUI) drawCPU(s model.Snapshot, x, y, w, h int) {
 	t.printf(x, y, sectionStyle(), padRight("CPU", w))
 	t.printf(x, y+1, tcell.StyleDefault, fmt.Sprintf("%-14s %s", "model", trim(s.CPU.ModelName, w-15)))
 	t.printf(x, y+2, tcell.StyleDefault, fmt.Sprintf("%-14s %d logical / %d physical", "cores", s.CPU.LogicalCores, s.CPU.PhysicalCores))
-	t.printf(x, y+3, tcell.StyleDefault, fmt.Sprintf("%-14s %.0f MHz", "frequency", s.CPU.FreqMHz))
+	if s.CPU.FreqMHz >= 100 {
+		t.printf(x, y+3, tcell.StyleDefault, fmt.Sprintf("%-14s %.0f MHz", "frequency", s.CPU.FreqMHz))
+	}
 	if s.CPU.TempCelsius > 0 {
 		t.printf(x, y+4, tcell.StyleDefault, fmt.Sprintf("%-14s %.1f °C", "temperature", s.CPU.TempCelsius))
 	}
